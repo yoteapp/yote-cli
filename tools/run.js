@@ -41,11 +41,12 @@ module.exports = async function (program) {
   program
     .command("run")
     .alias("R")
-    .option('-a', '--all', 'run everything')
-    .option('-m', '--mobile', 'run ios simulator')
-    .option('-w', '--web', 'run web client')
-    .option('-s', '--server', 'run yote server')
-    .option('-t', '--tabs', 'run in new tabs')
+    // these options are deprecated in favor of using prompts to select the run mode
+    // .option('-a', '--all', 'run everything')
+    // .option('-m', '--mobile', 'run ios simulator')
+    // .option('-w', '--web', 'run web client')
+    // .option('-s', '--server', 'run yote server')
+    // .option('-t', '--tabs', 'run in new tabs')
     .on('--help', () => {
       console.log('   To add a new resource to the Yote app')
       console.log(chalk.green('     $ yote A <resourceName>'));
