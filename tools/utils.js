@@ -5,9 +5,19 @@ let pluralize = require('pluralize');
 let shell = require('shelljs');
 
 exports.getYoteVersion = () => {
-  var yoteProject = JSON.parse(fs.readFileSync('./yote-project.json', 'utf8'));
-  console.log("VERSION: " + yoteProject['yote-version']);
-  return yoteProject['yote-version'];
+  const yoteProjectExists = exports.checkIfExists('./yote-project.json');
+  if(yoteProjectExists) {
+    const yoteProject = JSON.parse(fs.readFileSync('./yote-project.json', 'utf8'));
+    if(yoteProject['yote-version']) {
+      console.log("VERSION: " + yoteProject['yote-version']);
+      return yoteProject['yote-version'];
+    } else {
+      // console.log('No yote version found. Defaulting to 3.0.0')
+      return '3.0.0'
+    }
+  } else {
+    return '3.0.0'
+  }
 }
 
 exports.getYoteMobileProjectName = () => {
@@ -19,6 +29,17 @@ exports.getYoteMobileProjectName = () => {
 exports.checkIfExists = (path) => {
   var exists = fs.existsSync(path);
   return exists;
+}
+
+exports.getDevelopmentUrl = () => {
+  const { proxy } = JSON.parse(fs.readFileSync(`./web/package.json`, 'utf8'));
+  return proxy;
+}
+
+exports.getDevServerPort = () => {
+  const proxy = exports.getDevelopmentUrl();
+  const port = proxy.substring(proxy.lastIndexOf(':') + 1);
+  return port;
 }
 
 exports.getNormalizedName = (str) => {
@@ -61,7 +82,7 @@ exports.mkdir = (path, fn) => {
   shell.mkdir('-p', path);
   shell.chmod(755, path);
   console.log(chalk.cyan('   create directory: '), path);
-  if (fn) fn();
+  if(fn) fn();
 }
 
 exports.rmDir = (path, cb) => {

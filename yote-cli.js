@@ -35,12 +35,12 @@ program
   .command('init <appName>')
   .alias('I')
   .description('Initialize a new Yote application called <appName>')
-  .option('-a', '--all', 'with Client, Server, and Mobile (default)')
-  .option('-c', '--client', 'with Client')
-  .option('-w', '--web', 'with web client')
-  .option('-s', '--server', 'with Server')
-  .option('-m', '--mobile', 'with Mobile')
-  .option('-i', '--install', 'and install packages')
+  // NOTE: These options have been removed in favor of using inquirer to ask the user what they want to install
+  // .option('-a', '--all', 'with Web Client, Server, and Mobile (default)')
+  // .option('-w', '--web', 'with Web client')
+  // .option('-s', '--server', 'with Server')
+  // .option('-m', '--mobile', 'with Mobile')
+  // .option('-i', '--install', 'and install packages')
   .action(init)
   .on('--help', () => {
     console.log('  To initialize a new blank Yote app')
@@ -52,12 +52,12 @@ program
     console.log();
     console.log('    $ yote init myApp');
     console.log('    $ yote I myApp');
-    console.log();
-    console.log('  Options:');
-    console.log('    -w,s,m: install just web, server, and/or mobile')
-    console.log();
-    console.log('    $ yote I -sm')
-    console.log(chalk.dim('    # installs only the server and mobile components'))
+    // console.log();
+    // console.log('  Options:');
+    // console.log('    -w,s,m: install just web, server, and/or mobile')
+    // console.log();
+    // console.log('    $ yote I -sm')
+    // console.log(chalk.dim('    # installs only the server and mobile components'))
   });
 program
   .command('add <resourceName>')

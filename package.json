@@ -42,12 +42,15 @@
     "chalk": "^0.5.1",
     "cli-spinner": "^0.2.6",
     "commander": "^2.3.0",
+    "inquirer": "^8.2.5",
     "lodash": "^4.17.4",
+    "open": "^9.0.0",
     "pluralize": "^7.0.0",
     "prompt": "^0.2.13",
     "promptly": "^0.2.0",
     "react-native-cli": "^2.0.1",
     "shelljs": "^0.8.2",
-    "ttab": "^0.6.1"
+    "ttab": "^0.6.1",
+    "wait-on": "^7.0.1"
   }
 }
