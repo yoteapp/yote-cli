@@ -44,12 +44,9 @@ const Single__PascalName__ = () => {
 const Skeleton = () => {
   return (
     <div className="animate-pulse">
-      <p className="w-48 h-5 bg-gray-400" />
-      <p className="h-1" />
-      <p className="w-64 h-5 bg-gray-400" />
-      <p className="h-1" />
+      <h2>__PascalName__ details</h2>
+      <h1 className='bg-gray-600 text-gray-600 w-fit'> __PascalName__ Name </h1>
     </div>
   )
 }
-
 export default Single__PascalName__

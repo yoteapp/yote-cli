@@ -19,6 +19,7 @@ const __PascalName__Form = ({
   , formType
   , handleChange
   , handleSubmit
+  , isChanged
   , __camelName__
 }) => {
 
@@ -47,7 +48,7 @@ const __PascalName__Form = ({
           Cancel
         </Link>
         <button
-          disabled={disabled}
+          disabled={disabled || !isChanged}
           type='submit'
         >
           {buttonText}
@@ -64,6 +65,7 @@ __PascalName__Form.propTypes = {
   , formType: PropTypes.string.isRequired
   , handleChange: PropTypes.func.isRequired
   , handleSubmit: PropTypes.func.isRequired
+  , isChanged: PropTypes.bool.isRequired
   , __camelName__: PropTypes.object.isRequired
 }
 

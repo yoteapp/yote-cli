@@ -15,17 +15,18 @@ const __PascalName__ListItem = ({ id }) => {
 
   if(!__camelName__) return <Skeleton />;
   return (
-    <li>
+    <li className="list-none p-2 block">
       <Link to={`/__kebabNamePlural__/${__camelName__?._id}`}>{__camelName__?.name}</Link>
     </li>
   )
 }
 
 // custom loading skeleton for this component, by defining it right here we can keep it synced with any changes we make to the actual component above
+// Use placeholder text of the same length as the expected content to avoid layout shifting
 const Skeleton = () => {
   return (
-    <li className="animate-pulse">
-      <p className='bg-gray-600 h-4 w-48 mt-1'></p>
+    <li className="animate-pulse list-none p-2 block cursor-default select-none">
+      <p className='bg-gray-600 text-gray-600 w-fit' href="#"> __PascalName__ Name</p>
     </li>
   )
 }
