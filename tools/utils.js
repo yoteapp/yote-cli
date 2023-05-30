@@ -21,13 +21,20 @@ exports.getYoteVersion = () => {
 }
 
 exports.getYoteMobileProjectName = () => {
-  var yoteProject = JSON.parse(fs.readFileSync('./yote-project.json', 'utf8'));
+  const yoteProject = JSON.parse(fs.readFileSync('./yote-project.json', 'utf8'));
   console.log("MOBILE APP NAME: " + yoteProject['yote-mobile-project-name']);
   return yoteProject['yote-mobile-project-name'];
 }
 
+exports.getProjectName = () => {
+  // read current directory name
+  const projectName = process.cwd().split('/').pop();
+  console.log("PROJECT NAME: " + projectName);
+  return projectName || 'No Project Name Found';
+}
+
 exports.checkIfExists = (path) => {
-  var exists = fs.existsSync(path);
+  const exists = fs.existsSync(path);
   return exists;
 }
 

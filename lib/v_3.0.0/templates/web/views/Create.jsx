@@ -21,7 +21,7 @@ import { useCreate__PascalName__ } from '../__camelName__Service';
 const Create__PascalName__ = () => {
   const history = useHistory();
   const location = useLocation();
-  const { data: __camelName__, handleChange, handleSubmit, ...__camelName__Query } = useCreate__PascalName__({
+  const { data: __camelName__, handleChange, handleSubmit, isChanged, ...__camelName__Query } = useCreate__PascalName__({
     // optional, anything we want to add to the default object
     initialState: {
       // someKey: someValue
@@ -48,6 +48,7 @@ const Create__PascalName__ = () => {
           formType='create'
           handleChange={handleChange}
           handleSubmit={handleSubmit}
+          isChanged={isChanged}
         />
       </WaitOn>
     </__PascalName__Layout>
