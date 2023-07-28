@@ -138,7 +138,7 @@ module.exports = async function (program) {
     const tabCmd = 'ttab -w'; // no options for now, but we could use `ttab` to open in a new tab instead of a new window, but I've found that to be buggy
     console.log(chalk.cyan('      Run: '), chalk.bgCyan(' ' + runOptions.join(', ') + '\n'));
     if(runOptions.includes('web')) {
-      startWeb(tabCmd + ' -t "Yote Web"');
+      startWeb(tabCmd + ` -t "${projectName} Web"`);
       if(runOptions.includes('server')) {
         // wait for web to build the dist folder
         waitOn({ resources: ['./web/dist/index.html'] }, (err) =>  {
@@ -147,7 +147,7 @@ module.exports = async function (program) {
             console.log(chalk.bgRed('   Error message: ', err));
           }
           // now that the web client is built, we can run the server
-          startServer(tabCmd + ' -t "Yote Server"');
+          startServer(tabCmd + ` -t "${projectName} Server"`);
         });
       }  
       const webUrl = utils.getDevelopmentUrl();
@@ -168,10 +168,10 @@ module.exports = async function (program) {
     } else {
       // if we're not running the web client, we can run the server immediately
       if(runOptions.includes('server')) {
-        startServer(tabCmd + ' -t "Yote Server"');
+        startServer(tabCmd + ` -t "${projectName} Server"`);
       }
       if(runOptions.includes('mobile')) {
-        startMobile(tabCmd + ' -t "Yote Mobile"');
+        startMobile(tabCmd + ` -t "${projectName} Mobile"`);
       }
     }
 
