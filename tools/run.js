@@ -135,10 +135,17 @@ module.exports = async function (program) {
         choices: validOptions
       }
     ]);
+    const { confirmInstallDependencies } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'confirmInstallDependencies',
+        message: "Would you like to install dependencies?"
+      }
+    ]);
     const tabCmd = 'ttab -w'; // no options for now, but we could use `ttab` to open in a new tab instead of a new window, but I've found that to be buggy
     console.log(chalk.cyan('      Run: '), chalk.bgCyan(' ' + runOptions.join(', ') + '\n'));
     if(runOptions.includes('web')) {
-      startWeb(tabCmd + ' -t "Yote Web"');
+      startWeb({tabCmd: `${tabCmd} -t "${projectName} Web"`, runInstallCmd: confirmInstallDependencies});
       if(runOptions.includes('server')) {
         // wait for web to build the dist folder
         waitOn({ resources: ['./web/dist/index.html'] }, (err) =>  {
@@ -147,7 +154,7 @@ module.exports = async function (program) {
             console.log(chalk.bgRed('   Error message: ', err));
           }
           // now that the web client is built, we can run the server
-          startServer(tabCmd + ' -t "Yote Server"');
+          startServer({tabCmd: `${tabCmd} -t "${projectName} Server"`, runInstallCmd: confirmInstallDependencies});
         });
       }  
       const webUrl = utils.getDevelopmentUrl();
@@ -168,10 +175,10 @@ module.exports = async function (program) {
     } else {
       // if we're not running the web client, we can run the server immediately
       if(runOptions.includes('server')) {
-        startServer(tabCmd + ' -t "Yote Server"');
+        startServer({tabCmd: `${tabCmd} -t "${projectName} Server"`, runInstallCmd: confirmInstallDependencies});
       }
       if(runOptions.includes('mobile')) {
-        startMobile(tabCmd + ' -t "Yote Mobile"');
+        startMobile({tabCmd: `${tabCmd} -t "${projectName} Mobile"`, runInstallCmd: confirmInstallDependencies});
       }
     }
 
@@ -179,11 +186,19 @@ module.exports = async function (program) {
 }
 
 
-const startServer = async (tabCmd = 'ttab') => {
+const startServer = async ({tabCmd = 'ttab', runInstallCmd}) => {
   console.log(chalk.cyan('     Starting server at: '), chalk.bgCyan(' `./server`'));
   if(utils.checkIfExists('./server')) {
     const serverPort = utils.getDevServerPort();
     console.log(chalk.cyan('     Starting server at port: '), chalk.bgCyan(' ' + serverPort + ' '));
+    if (runInstallCmd) {
+      // rm existing node_modules
+      console.log(chalk.cyan('     Removing existing node_modules...'));
+      shell.rm('-rf', './server/node_modules');
+      console.log(chalk.cyan('     Installing server dependencies...'));
+      const serverInstall = utils.getServerInstallScript();
+      shell.exec(serverInstall, { cwd: './server' });
+    }
     waitOn({ resources: ['./web/dist/index.html'] }, (err) =>  {
       if(err) {
         console.log(chalk.bgRed('     Error: There was a problem waiting for the web client to build.'));
@@ -206,9 +221,17 @@ const startServer = async (tabCmd = 'ttab') => {
   }
 }
 
-const startWeb = async (tabCmd = 'ttab') => {
-  console.log(chalk.cyan('     Starting web client at: '), chalk.bgCyan(' `./web`'));
+const startWeb = async ({ tabCmd = 'ttab', runInstallCmd }) => {
   if(utils.checkIfExists('./web')) {
+    console.log(chalk.cyan('     Starting web client at: '), chalk.bgCyan(' `./web`'));
+    if(runInstallCmd) {
+      // rm existing node_modules
+      console.log(chalk.cyan('     Removing existing node_modules...'));
+      shell.rm('-rf', './web/node_modules');
+      console.log(chalk.cyan('     Installing web client dependencies...'));
+      const webInstall = utils.getWebInstallScript();
+      shell.exec(webInstall, {cwd: './web'});
+    }
     const runWebOperation = shell.exec(`${tabCmd} -d ./web npm run start`);
     if(runWebOperation.code !== 0) {
       console.log(chalk.bgRed('     Error: There was a problem running the web client.'));
@@ -223,10 +246,18 @@ const startWeb = async (tabCmd = 'ttab') => {
   }
 }
 
-const startMobile = async (tabCmd = 'ttab') => {
+const startMobile = async ({tabCmd = 'ttab', runInstallCmd}) => {
   if(utils.checkIfExists('./mobile')) {
     const mobileProjectName = utils.getYoteMobileProjectName();
     console.log(chalk.cyan('     Running mobile project: '), chalk.bgCyan(' ' + mobileProjectName + ' '));
+    if(runInstallCmd) {
+      // rm existing node_modules
+      console.log(chalk.cyan('     Removing existing node_modules...'));
+      shell.rm('-rf', './mobile/node_modules');
+      console.log(chalk.cyan('     Installing mobile client dependencies...'));
+      const mobileInstall = utils.getMobileInstallScript();
+      shell.exec(mobileInstall, {cwd: './mobile'});
+    }
     shell.exec(`${tabCmd} -d mobile/${mobileProjectName} npm start`);
     shell.exec(`${tabCmd} -d mobile/${mobileProjectName} react-native run-ios`);
     return;

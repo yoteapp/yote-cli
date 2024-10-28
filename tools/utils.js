@@ -26,6 +26,35 @@ exports.getYoteMobileProjectName = () => {
   return yoteProject['yote-mobile-project-name'];
 }
 
+const utilParsePackageJson = (path) => {
+  const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
+  return packageJson;
+}
+
+const utilGetInstallScript = (path) => {
+  if(!this.checkIfExists(path)) {
+    console.log(chalk.red('ERROR: No package.json found in path: ' + path));
+    return;
+  }
+  const { customInstallScript } = utilParsePackageJson(path);
+  return customInstallScript || 'npm install';
+}
+
+exports.getWebInstallScript = () => {
+  const install = utilGetInstallScript(`./web/package.json`);
+  return install || 'npm install';
+}
+
+exports.getMobileInstallScript = () => {
+  const install = utilGetInstallScript(`./mobile/package.json`);
+  return install || 'npm install';
+}
+
+exports.getServerInstallScript = () => {
+  const install = utilGetInstallScript(`./server/package.json`);
+  return install || 'npm install';
+}
+
 exports.getProjectName = () => {
   // read current directory name
   const projectName = process.cwd().split('/').pop();
@@ -49,40 +78,32 @@ exports.getDevServerPort = () => {
   return port;
 }
 
-exports.getNormalizedName = (str) => {
-  /**
-   * Regardless of input, use _.camelCase() to normalize the str.
-   *
-   * NOTE:
-   * _.camelCase('Foo Bar');
-   * // => 'fooBar'
-   *
-   * _.camelCase('--foo-bar--');
-   * // => 'fooBar'
-   *
-   * _.camelCase('__FOO_BAR__');
-   * // => 'fooBar'
-   */
-  str = pluralize.singular(str);
-  str = _.camelCase(str);
-  return str;
+/**
+ * Regardless of input, use _.camelCase() to normalize the string.
+ *
+ * NOTE:
+ * _.camelCase('Foo Bar');
+ * // => 'fooBar'
+ *
+ * _.camelCase('--foo-bar--');
+ * // => 'fooBar'
+ *
+ * _.camelCase('__FOO_BAR__');
+ * // => 'fooBar'
+ */
+exports.getNormalizedName = (string) => {
+  string = pluralize.singular(string);
+  string = _.camelCase(string);
+  return string;
 }
 
 exports.capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-exports.camelCase = (str) => {
-  // if(str.indexOf('-') > -1) {
-  //   str = str.toLowerCase();
-  //   var parts = str.split(/[\-_ \s]/);
-  //   str = null;
-  //   for (var i = 0; i < parts.length; i++) {
-  //     str = (str ? str + capitalizeFirstLetter(parts[i]) : parts[i]);
-  //   }
-  // }
-  str = _.camelCase(str);
-  return str;
+exports.camelCase = (string) => {
+  string = _.camelCase(string);
+  return string;
 }
 
 exports.mkdir = (path, fn) => {
@@ -105,13 +126,13 @@ exports.replaceInFile = (path, oldString, newString, cb) => {
   if(cb) { cb() }
 }
 
-exports.append = (path, str) => {
-  fs.appendFileSync(path, str);
+exports.append = (path, string) => {
+  fs.appendFileSync(path, string);
   console.log(chalk.magenta('   appending file: '), path);
 }
 
-exports.write = (path, str) => {
-  fs.writeFileSync(path, str);
+exports.write = (path, string) => {
+  fs.writeFileSync(path, string);
   console.log(chalk.cyan('   create file: '), path);
 }
 
@@ -138,28 +159,28 @@ exports.findAndReplaceYote = (path, file, appName) => {
   return template;
 }
 
-exports.kebabCase = (str) => {
-  str = _.kebabCase(str);
-  return str;
+exports.kebabCase = (string) => {
+  string = _.kebabCase(string);
+  return string;
 }
 
-exports.actionCase = (str) => {
-  str = _.snakeCase(str);
-  str = _.toUpper(str);
-  return str;
+exports.actionCase = (string) => {
+  string = _.snakeCase(string);
+  string = _.toUpper(string);
+  return string;
 }
 
-exports.startCase = (str) => {
-  str = _.startCase(str);
-  return str;
+exports.startCase = (string) => {
+  string = _.startCase(string);
+  return string;
 }
 
-exports.pluralize = (str) => {
-  str = pluralize(str);
-  return str;
+exports.pluralize = (string) => {
+  string = pluralize(string);
+  return string;
 }
 
-exports.singularize = (str) => {
-  str = pluralize.singular(str);
-  return str;
+exports.singularize = (string) => {
+  string = pluralize.singular(string);
+  return string;
 }
