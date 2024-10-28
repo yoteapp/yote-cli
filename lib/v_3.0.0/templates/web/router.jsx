@@ -47,7 +47,7 @@ const __PascalName__Router = () => {
         exact
         login={true}
         path='/__kebabNamePlural__/:__camelName__Id/update'
-        // admin='admin'
+        // admin={true}
       />
     </Switch>
   )
