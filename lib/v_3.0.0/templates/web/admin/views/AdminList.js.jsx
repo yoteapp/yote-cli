@@ -82,7 +82,7 @@ class __PascalName__List extends Binder {
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <div className="admin-table-wrapper">
               <Link to={'/admin/__kebabNamePlural__/new'}> New __startName__</Link>
-              <table className="yt-table striped">
+              <table className="">
                 <thead>
                   <tr>
                     <th>Name</th>
